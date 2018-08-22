@@ -18,5 +18,4 @@ class TestSearchPage:
     def test_search_results_exist(self, driver, search_page):
         search_page.search_bar.send_keys('*')
         search_page.search_bar.send_keys(Keys.ENTER)
-        search_page.loading_indicator.here_then_gone()
         assert search_page.search_results

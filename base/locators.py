@@ -242,8 +242,12 @@ class BaseElement:
     def __getattribute__(self, attribute_name):
         """Return the normal expected value from __getattribute__ unless the attribute is a Locator.
         In that case, use the Locator to grab the element it represents from the WebDriver.
+        If there's a `loading_indicator` Locator, wait for loading to stop before grabbing a GroupLocator.
         """
         value = object.__getattribute__(self, attribute_name)
         if isinstance(value, BaseLocator):
+            if isinstance(value, GroupLocator):
+                if hasattr(self, 'loading_indicator'):
+                    self.loading_indicator.here_then_gone()
             return value.get_element(self.driver, attribute_name)
         return value
